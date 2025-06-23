@@ -2,7 +2,7 @@ use std::{cmp::Ordering, mem, ops::Deref, sync::Arc};
 
 use biocore::{
     dna::{DnaBase, DnaSequence},
-    location::{GenomePosition, SequenceOrientation},
+    location::ContigPosition,
     sequence::AsciiChar,
 };
 use hail::contig::GRCh38Contig;
@@ -152,10 +152,9 @@ impl SummaryStatKey {
         }
     }
 
-    pub fn at(&self) -> GenomePosition<GRCh38Contig> {
-        GenomePosition {
-            name: self.chr,
-            orientation: SequenceOrientation::Forward,
+    pub fn at(&self) -> ContigPosition<GRCh38Contig> {
+        ContigPosition {
+            contig: self.chr,
             at: self.pos - 1,
         }
     }

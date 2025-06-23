@@ -3,8 +3,9 @@ mod shared;
 use std::{cmp::Ordering, collections::BTreeMap};
 
 use futures::{StreamExt, stream};
+
 use genomes1000::simplified::SimplifiedRecord;
-use hail::contig::GRCh38Contig;
+use hail::contig::{GRCh37Contig, GRCh38Contig};
 use itertools::Itertools;
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
 use utile::plot::Histogram;
@@ -68,7 +69,7 @@ async fn main() {
 async fn run_phenotypes(
     phenotypes: Vec<PhenotypeManifestEntry>,
     lock: &'static tokio::sync::Mutex<()>,
-    liftover: &'static liftover::LiftoverIndexed,
+    liftover: &'static liftover::LiftoverIndexed<GRCh37Contig, GRCh38Contig>,
 ) {
     for p in &phenotypes {
         let path = output_path(p);

@@ -5,8 +5,9 @@ mod shared;
 use std::{cmp::Ordering, collections::BTreeSet};
 
 use futures::{StreamExt, stream};
+
 use genomes1000::{Genomes1000Fs, simplified::SimplifiedRecord};
-use hail::contig::GRCh38Contig;
+use hail::contig::{GRCh37Contig, GRCh38Contig};
 use ordered_float::NotNan;
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
 use shared::{output_path_pvalues, summary_stats_pvalues_temp_path};
@@ -72,7 +73,7 @@ async fn main() {
 async fn run_pvalues(
     phenotype: PhenotypeManifestEntry,
     lock: &'static tokio::sync::Mutex<()>,
-    liftover: &'static liftover::LiftoverIndexed,
+    liftover: &'static liftover::LiftoverIndexed<GRCh37Contig, GRCh38Contig>,
 ) {
     let path = output_path_pvalues(&phenotype);
     std::fs::create_dir_all(path.as_ref().parent().unwrap()).unwrap();
@@ -154,7 +155,7 @@ async fn match_summary_stats(
 async fn load_and_cache_top_pvalues(
     phenotype: PhenotypeManifestEntry,
     lock: &'static tokio::sync::Mutex<()>,
-    liftover: &'static liftover::LiftoverIndexed,
+    liftover: &'static liftover::LiftoverIndexed<GRCh37Contig, GRCh38Contig>,
 ) -> impl Iterator<Item = SummaryStats<GRCh38Contig>> {
     let path = summary_stats_pvalues_temp_path(&phenotype);
 

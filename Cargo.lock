@@ -425,9 +425,8 @@ dependencies = [
 [[package]]
 name = "biocore"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4#171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4"
+source = "git+https://github.com/QuartzLibrary/bio?rev=e6f6e97037ff224d90016088c11c086ea7fa878d#e6f6e97037ff224d90016088c11c086ea7fa878d"
 dependencies = [
- "anyhow",
  "log",
  "noodles 0.98.0",
  "ref-cast",
@@ -1232,7 +1231,7 @@ dependencies = [
 [[package]]
 name = "genomes1000"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4#171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4"
+source = "git+https://github.com/QuartzLibrary/bio?rev=e6f6e97037ff224d90016088c11c086ea7fa878d#e6f6e97037ff224d90016088c11c086ea7fa878d"
 dependencies = [
  "biocore",
  "csv",
@@ -1408,7 +1407,7 @@ dependencies = [
 [[package]]
 name = "hail"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4#171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4"
+source = "git+https://github.com/QuartzLibrary/bio?rev=e6f6e97037ff224d90016088c11c086ea7fa878d#e6f6e97037ff224d90016088c11c086ea7fa878d"
 dependencies = [
  "biocore",
  "either",
@@ -1813,7 +1812,7 @@ dependencies = [
 [[package]]
 name = "ids"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4#171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4"
+source = "git+https://github.com/QuartzLibrary/bio?rev=e6f6e97037ff224d90016088c11c086ea7fa878d#e6f6e97037ff224d90016088c11c086ea7fa878d"
 dependencies = [
  "serde",
  "thiserror 2.0.12",
@@ -2151,7 +2150,7 @@ dependencies = [
 [[package]]
 name = "liftover"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4#171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4"
+source = "git+https://github.com/QuartzLibrary/bio?rev=e6f6e97037ff224d90016088c11c086ea7fa878d#e6f6e97037ff224d90016088c11c086ea7fa878d"
 dependencies = [
  "anyhow",
  "biocore",
@@ -2669,7 +2668,7 @@ dependencies = [
 [[package]]
 name = "pan_ukbb"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4#171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4"
+source = "git+https://github.com/QuartzLibrary/bio?rev=e6f6e97037ff224d90016088c11c086ea7fa878d#e6f6e97037ff224d90016088c11c086ea7fa878d"
 dependencies = [
  "biocore",
  "csv",
@@ -2735,11 +2734,10 @@ checksum = "e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e"
 [[package]]
 name = "pgs_catalog"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4#171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4"
+source = "git+https://github.com/QuartzLibrary/bio?rev=e6f6e97037ff224d90016088c11c086ea7fa878d#e6f6e97037ff224d90016088c11c086ea7fa878d"
 dependencies = [
  "biocore",
  "csv",
- "flate2",
  "ids",
  "log",
  "ordered-float",
@@ -3833,6 +3831,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
 [[package]]
+name = "signal-hook-registry"
+version = "1.4.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b2a4719bff48cee6b39d12c020eeb490953ad2443b7055bd0b21fca26bd8c28b"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "simdutf8"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -4243,6 +4250,7 @@ dependencies = [
  "libc",
  "mio",
  "pin-project-lite",
+ "signal-hook-registry",
  "socket2",
  "tokio-macros",
  "windows-sys 0.52.0",
@@ -4497,9 +4505,8 @@ checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
 [[package]]
 name = "utile"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4#171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4"
+source = "git+https://github.com/QuartzLibrary/bio?rev=e6f6e97037ff224d90016088c11c086ea7fa878d#e6f6e97037ff224d90016088c11c086ea7fa878d"
 dependencies = [
- "anyhow",
  "async-compression",
  "brotli",
  "bytes",
@@ -4516,10 +4523,12 @@ dependencies = [
  "pin-project",
  "plotly",
  "rand 0.9.1",
+ "regex",
  "reqwest",
  "rmp-serde",
  "serde",
  "serde_json",
+ "serde_with",
  "suppaftp",
  "tempfile",
  "thiserror 2.0.12",

@@ -1,8 +1,9 @@
-use std::{cmp::Ordering, str::FromStr};
+use std::cmp::Ordering;
 
 use analysis::util::InspectEvery;
+use biocore::location::orientation::{SequenceOrientation, WithOrientation};
 use futures::{StreamExt, stream};
-use hail::contig::GRCh38Contig;
+use hail::contig::{GRCh37Contig, GRCh38Contig};
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
 use tokio::task::spawn_blocking;
 use utile::{
@@ -15,7 +16,7 @@ type FastaReader = biocore::fasta::IndexedFastaReader<std::io::BufReader<std::fs
 pub async fn merged_summary_stats(
     phenotypes: Vec<PhenotypeManifestEntry>,
     lock: &'static tokio::sync::Mutex<()>,
-    liftover: &'static liftover::LiftoverIndexed,
+    liftover: &'static liftover::LiftoverIndexed<GRCh37Contig, GRCh38Contig>,
 ) -> impl Iterator<Item = (String, SummaryStats<GRCh38Contig>)> {
     let all_summary_stats: Vec<_> = stream::iter(phenotypes.clone())
         .map(|p| async move {
@@ -42,7 +43,7 @@ pub async fn merged_summary_stats(
 
 pub async fn summary_stats(
     phenotype: PhenotypeManifestEntry,
-    liftover: &'static liftover::LiftoverIndexed,
+    liftover: &'static liftover::LiftoverIndexed<GRCh37Contig, GRCh38Contig>,
     lock: &'static tokio::sync::Mutex<()>,
 ) -> impl Iterator<Item = SummaryStats<GRCh38Contig>> {
     let summary_stats_entry = super::summary_stats_temp_path(&phenotype);
@@ -62,7 +63,7 @@ pub async fn summary_stats(
 async fn load_and_cache_summary_stats(
     phenotype: PhenotypeManifestEntry,
     entry: &FsCacheEntry,
-    liftover: &'static liftover::LiftoverIndexed,
+    liftover: &'static liftover::LiftoverIndexed<GRCh37Contig, GRCh38Contig>,
     lock: &'static tokio::sync::Mutex<()>,
 ) {
     log::info!("[SummaryStats][{}] Starting", phenotype.filename);
@@ -125,7 +126,7 @@ fn load_summary_stats(
     summary_stats: impl Iterator<Item = SummaryStats<hail::contig::GRCh37Contig>>,
     grch38: &mut FastaReader,
     grch37: &mut FastaReader,
-    liftover: &liftover::LiftoverIndexed,
+    liftover: &liftover::LiftoverIndexed<hail::contig::GRCh37Contig, GRCh38Contig>,
 ) -> Vec<SummaryStats<GRCh38Contig>> {
     log::info!("[load_summary_stats] Starting");
 
@@ -157,22 +158,22 @@ fn load_summary_stats(
             }
 
             liftover
-                .map_range_raw(at.map_contig(|c| c.to_string()))
-                .filter_map(|(mapped, was_flipped)| {
-                    let mut new = s
-                        .clone()
-                        .map_contig(|_| GRCh38Contig::from_str(&mapped.name).unwrap());
+                .map_range_raw(&WithOrientation::new_forward(at))
+                .filter_map(|mut mapped| {
+                    let was_flipped = mapped.is_reverse();
+                    mapped.set_orientation(SequenceOrientation::Forward);
 
-                    // new.chr = mapped.name.clone();
-                    new.pos = mapped.at.start + 1;
+                    let mut new = s.clone().map_contig(|_| mapped.v.contig);
+
+                    new.pos = mapped.v.at.start + 1;
                     if was_flipped {
-                        new.ref_allele = s.ref_allele.clone().reverse_complement(|b| b.complement())
+                        new.ref_allele = s.ref_allele.clone().reverse_complement()
                     }
                     if was_flipped {
-                        new.alt = s.alt.clone().reverse_complement(|b| b.complement())
+                        new.alt = s.alt.clone().reverse_complement()
                     }
 
-                    let found38 = match grch38.query(&mapped) {
+                    let found38 = match grch38.query(&mapped.v) {
                         Ok(found) => found,
                         Err(e) => {
                             log::warn!(

@@ -20,10 +20,10 @@ path = "src/worker/main.rs"
 [dependencies]
 analysis = { path = "analysis" }
 
-biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4" }
-hail = { git = "https://github.com/QuartzLibrary/bio", rev = "171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4" }
-pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4" }
-utile = { git = "https://github.com/QuartzLibrary/bio", rev = "171a57a1c46b7c0514e6ea9f1d150bba6f6c24c4" }
+biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
+hail = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
+pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
+utile = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
 
 leptos_ext = { git = "https://github.com/QuartzLibrary/leptos_ext", rev = "84e0be960509f1ed08a049cf785972f85234f575" }
 

@@ -6,7 +6,7 @@ use std::{
     sync::Arc,
 };
 
-use biocore::location::GenomePosition;
+use biocore::location::ContigPosition;
 use genomes1000::{
     pedigree::{Pedigree, Sex},
     resource::Genomes1000Resource,
@@ -569,7 +569,7 @@ impl SummaryStatHandle {
         }
     }
 
-    pub fn at(&self) -> GenomePosition<GRCh38Contig> {
+    pub fn at(&self) -> ContigPosition<GRCh38Contig> {
         self.key.at()
     }
 }

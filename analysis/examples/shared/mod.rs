@@ -5,7 +5,7 @@ pub mod summary_stats;
 use std::{cmp::Ordering, str::FromStr, sync::LazyLock};
 
 use genomes1000::simplified::SimplifiedRecord;
-use hail::contig::GRCh38Contig;
+use hail::contig::{GRCh37Contig, GRCh38Contig};
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
 use tokio::task::spawn_blocking;
 use utile::{
@@ -51,7 +51,7 @@ pub fn cmp_variant(a: &SimplifiedRecord, b: &SummaryStats<GRCh38Contig>) -> Orde
     .then_with(|| Ord::cmp(&a.alternate_allele, &b.alt))
 }
 
-pub async fn load_liftover() -> liftover::LiftoverIndexed {
+pub async fn load_liftover() -> liftover::LiftoverIndexed<GRCh37Contig, GRCh38Contig> {
     spawn_blocking(|| {
         log::info!("[Liftover] Loading");
         let liftover = liftover::Liftover::load(
@@ -60,6 +60,10 @@ pub async fn load_liftover() -> liftover::LiftoverIndexed {
                 .with_global_fs_cache(),
         )
         .unwrap()
+        .upgrade_contigs(
+            |c| c.as_ref().parse().unwrap(),
+            |c| c.as_ref().parse().unwrap(),
+        )
         .indexed();
         log::info!("[Liftover] Loaded");
         liftover
