@@ -1,6 +1,6 @@
 #![feature(let_chains)]
 
-mod shared;
+mod pan_ukbb_shared;
 
 use std::{cmp::Ordering, collections::BTreeSet};
 
@@ -10,7 +10,6 @@ use genomes1000::{Genomes1000Fs, simplified::SimplifiedRecord};
 use hail::contig::{GRCh37Contig, GRCh38Contig};
 use ordered_float::NotNan;
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
-use shared::{output_path_pvalues, summary_stats_pvalues_temp_path};
 use utile::resource::{RawResource, RawResourceExt};
 
 use analysis::{
@@ -20,7 +19,10 @@ use analysis::{
 
 const TOP_PVALUES_N: usize = 3_000;
 
-use self::shared::{cmp_variant, load_liftover, log_memory, summary_stats::summary_stats};
+use self::pan_ukbb_shared::{
+    cmp_variant, load_liftover, log_memory, output_path_pvalues, summary_stats::summary_stats,
+    summary_stats_pvalues_temp_path,
+};
 
 #[tokio::main]
 async fn main() {

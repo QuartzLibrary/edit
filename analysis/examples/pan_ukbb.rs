@@ -1,4 +1,4 @@
-mod shared;
+mod pan_ukbb_shared;
 
 use std::{cmp::Ordering, collections::BTreeMap};
 
@@ -12,7 +12,7 @@ use utile::plot::Histogram;
 
 use analysis::{scores::Scores, util::InspectEvery};
 
-use self::shared::{
+use self::pan_ukbb_shared::{
     cmp_variant, load_liftover, log_memory, output_path, summary_stats::merged_summary_stats,
 };
 
