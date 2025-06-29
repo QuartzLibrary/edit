@@ -1,4 +1,4 @@
-use edit::WorkerStruct;
+use edit::pan_ukbb_worker::WorkerStruct;
 use gloo_worker::Registrable;
 use leptos::task::Executor;
 

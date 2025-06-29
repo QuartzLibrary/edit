@@ -28,8 +28,12 @@ use pan_ukbb::{PhenotypeManifestEntry, Population, SummaryStats};
 use analysis::scores::Stats;
 
 use edit::{
-    send_option::SendOption, util::PLOTLY_THEME, Input, Output, OutputGetEditAnalysis,
-    OutputGetScores, OutputInit, VariantInfo, VariantSampleInfo, WorkerStruct,
+    pan_ukbb_worker::{
+        Input, Output, OutputGetEditAnalysis, OutputGetScores, OutputInit, VariantInfo,
+        VariantSampleInfo, WorkerStruct,
+    },
+    send_option::SendOption,
+    util::PLOTLY_THEME,
 };
 
 const BINS: usize = 100;

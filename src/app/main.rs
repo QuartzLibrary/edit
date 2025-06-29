@@ -10,7 +10,7 @@ thread_local! {
     static MANIFEST: LazyLock<ArcRwSignal<Option<io::Result<Vec<PhenotypeManifestEntry>>>>> = LazyLock::new(|| {
         wasm_bindgen_futures::spawn_local(async move {
             let origin = leptos::prelude::window().location().origin().unwrap();
-            let manifest = edit::fetch_manifest(origin).await;
+            let manifest = edit::pan_ukbb_worker::files::fetch_manifest(origin).await;
             MANIFEST.with(|m| m.set(Some(manifest)));
         });
         ArcRwSignal::new(None)
