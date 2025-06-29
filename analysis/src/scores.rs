@@ -19,7 +19,7 @@ use serde::{Deserialize, Serialize};
 use std::hash::Hash;
 use utile::resource::RawResourceExt;
 
-use crate::util::{MArc, SummaryStatKey, mean, std_dev};
+use crate::util::{MArc, Stats, SummaryStatKey, mean, std_dev};
 
 const EDIT_COUNT: usize = 100;
 
@@ -60,32 +60,6 @@ pub struct Variant {
     pub min_edit_hq: Option<NotNan<f64>>,
 
     pub key: Box<SummaryStatHandle>,
-}
-
-#[derive(Debug, Clone, Copy)]
-#[derive(Serialize, Deserialize)]
-pub struct Stats {
-    pub mean: f64,
-    pub std_dev: f64,
-    pub min: f64,
-    pub max: f64,
-}
-impl Stats {
-    pub fn normalise_value(&self, v: f64) -> f64 {
-        (v - self.mean) / self.std_dev
-    }
-    pub fn normalised_self(&self) -> Self {
-        self.normalised(self.mean, self.std_dev)
-    }
-    pub fn normalised(&self, mean: f64, std_dev: f64) -> Self {
-        let normalise = |v: f64| (v - mean) / std_dev;
-        Self {
-            mean: normalise(self.mean),
-            std_dev: self.std_dev / std_dev,
-            min: normalise(self.min),
-            max: normalise(self.max),
-        }
-    }
 }
 
 impl Scores {
@@ -535,6 +509,7 @@ impl Variant {
     }
 
     pub fn normalised(&self, std_dev: NotNan<f64>, std_dev_hq: NotNan<f64>) -> Self {
+        assert_eq!(None, self.key._handle);
         Self {
             max_edit: self.max_edit / std_dev,
             min_edit: self.min_edit / std_dev,

@@ -9,8 +9,7 @@ use utile::collections::counting_set::CountingBTreeSet;
 
 use analysis::{
     pvalues::{SampleGenotype, TopPValueVariant},
-    scores::Stats,
-    util::SummaryStatKey,
+    util::{Stats, SummaryStatKey},
 };
 
 use crate::util::{yield_now, AsJson};

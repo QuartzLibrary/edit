@@ -13,8 +13,8 @@ use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
 use utile::collections::counting_set::CountingBTreeSet;
 
 use analysis::{
-    scores::{Scores, Stats},
-    util::SummaryStatKey,
+    scores::Scores,
+    util::{Stats, SummaryStatKey},
 };
 
 use crate::util::{spawn_task, AsJson};

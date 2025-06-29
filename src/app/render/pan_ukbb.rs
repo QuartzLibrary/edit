@@ -25,7 +25,7 @@ use web_sys;
 
 use pan_ukbb::{PhenotypeManifestEntry, Population, SummaryStats};
 
-use analysis::scores::Stats;
+use analysis::util::Stats;
 
 use edit::{
     pan_ukbb_worker::{

@@ -9,6 +9,32 @@ use hail::contig::GRCh38Contig;
 use pan_ukbb::{PhenotypeManifestEntry, Population, SummaryStats};
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize)]
+pub struct Stats {
+    pub mean: f64,
+    pub std_dev: f64,
+    pub min: f64,
+    pub max: f64,
+}
+impl Stats {
+    pub fn normalise_value(&self, v: f64) -> f64 {
+        (v - self.mean) / self.std_dev
+    }
+    pub fn normalised_self(&self) -> Self {
+        self.normalised(self.mean, self.std_dev)
+    }
+    pub fn normalised(&self, mean: f64, std_dev: f64) -> Self {
+        let normalise = |v: f64| (v - mean) / std_dev;
+        Self {
+            mean: normalise(self.mean),
+            std_dev: self.std_dev / std_dev,
+            min: normalise(self.min),
+            max: normalise(self.max),
+        }
+    }
+}
+
 pub fn mean(value: impl Iterator<Item = f64>) -> Option<f64> {
     let mut sum = 0.0;
     let mut count = 0.0;

@@ -4,7 +4,8 @@ use std::{cell::RefCell, sync::OnceLock};
 
 use analysis::{
     pvalues::{PhenotypeTopPValues, TopPValueVariant},
-    scores::{Scores, Stats},
+    scores::Scores,
+    util::Stats,
 };
 
 use crate::util::{wait_for, HandlerIdOrd};
