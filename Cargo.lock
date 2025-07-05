@@ -933,6 +933,7 @@ dependencies = [
  "log",
  "ordered-float",
  "pan_ukbb",
+ "pgs_catalog",
  "plotly",
  "rand 0.9.1",
  "reqwest",

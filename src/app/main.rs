@@ -1,7 +1,10 @@
+#![feature(if_let_guard)]
+
 mod render;
 
 use leptos::{ev, html, prelude::*, IntoView, *};
 use leptos_ext::{signal::ReadSignalExt, util::SharedBox};
+use pgs_catalog::PgsId;
 use std::{io, sync::LazyLock};
 
 use pan_ukbb::PhenotypeManifestEntry;
@@ -12,6 +15,14 @@ thread_local! {
             let origin = leptos::prelude::window().location().origin().unwrap();
             let manifest = edit::pan_ukbb_worker::files::fetch_manifest(origin).await;
             MANIFEST.with(|m| m.set(Some(manifest)));
+        });
+        ArcRwSignal::new(None)
+    });
+    static METADATA: LazyLock<ArcRwSignal<Option<io::Result<pgs_catalog::metadata::Metadata>>>> = LazyLock::new(|| {
+        wasm_bindgen_futures::spawn_local(async move {
+            let origin = leptos::prelude::window().location().origin().unwrap();
+            let metadata = edit::pgs_catalog_worker::files::fetch_all_metadata(&origin, None).await;
+            METADATA.with(|m| m.set(Some(metadata)));
         });
         ArcRwSignal::new(None)
     });
@@ -36,6 +47,9 @@ fn app() -> impl IntoView {
         match &*url_fragments {
             [] => render::home::home().into_any(),
             ["pan_ukbb", file] => render::pan_ukbb::score_page((*file).to_owned()).into_any(),
+            ["pgs_catalog", pgs_id] if let Ok(pgs_id) = pgs_id.parse::<PgsId>() => {
+                render::pgs_catalog::score_page(pgs_id).into_any()
+            }
             _ => {
                 log::error!("Unknown URL: {url}");
                 html::div().child("404").into_any()
