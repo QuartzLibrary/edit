@@ -11,15 +11,15 @@ edition = "2021"
 
 [[bin]]
 name = "app"
-path = "src/app/main.rs"
+path = "src/bins/app/main.rs"
 
 [[bin]]
-name = "worker"
-path = "src/worker/main.rs"
+name = "ukbb"
+path = "src/bins/ukbb_main.rs"
 
 [[bin]]
-name = "worker2"
-path = "src/worker2/main.rs"
+name = "pgs"
+path = "src/bins/pgs_main.rs"
 
 [dependencies]
 analysis = { path = "analysis" }

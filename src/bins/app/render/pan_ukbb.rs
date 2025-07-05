@@ -28,11 +28,11 @@ use pan_ukbb::{PhenotypeManifestEntry, Population, SummaryStats};
 use analysis::util::Stats;
 
 use edit::{
-    pan_ukbb_worker::{
+    send_option::SendOption,
+    ukbb_worker::{
         Input, Output, OutputGetEditAnalysis, OutputGetScores, OutputInit, VariantInfo,
         VariantSampleInfo, WorkerStruct,
     },
-    send_option::SendOption,
     util::PLOTLY_THEME,
 };
 
@@ -1100,7 +1100,7 @@ impl PageState {
                     Output::GetScores(_) | Output::GetEditAnalysis(_) => unreachable!(),
                 }
             })
-            .spawn("/worker.js");
+            .spawn("/ukbb.js");
 
         bridge.send(Input::Set {
             file: file.clone(),

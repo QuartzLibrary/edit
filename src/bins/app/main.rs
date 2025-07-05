@@ -13,7 +13,7 @@ thread_local! {
     static MANIFEST: LazyLock<ArcRwSignal<Option<io::Result<Vec<PhenotypeManifestEntry>>>>> = LazyLock::new(|| {
         wasm_bindgen_futures::spawn_local(async move {
             let origin = leptos::prelude::window().location().origin().unwrap();
-            let manifest = edit::pan_ukbb_worker::files::fetch_manifest(origin).await;
+            let manifest = edit::ukbb_worker::files::fetch_manifest(origin).await;
             MANIFEST.with(|m| m.set(Some(manifest)));
         });
         ArcRwSignal::new(None)
@@ -21,7 +21,7 @@ thread_local! {
     static METADATA: LazyLock<ArcRwSignal<Option<io::Result<pgs_catalog::metadata::Metadata>>>> = LazyLock::new(|| {
         wasm_bindgen_futures::spawn_local(async move {
             let origin = leptos::prelude::window().location().origin().unwrap();
-            let metadata = edit::pgs_catalog_worker::files::fetch_all_metadata(&origin, None).await;
+            let metadata = edit::pgs_worker::files::fetch_all_metadata(&origin, None).await;
             METADATA.with(|m| m.set(Some(metadata)));
         });
         ArcRwSignal::new(None)

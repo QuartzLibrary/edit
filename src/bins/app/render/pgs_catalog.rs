@@ -34,7 +34,7 @@ use analysis::{
 };
 
 use edit::{
-    pgs_catalog_worker::{
+    pgs_worker::{
         Input, Output, OutputGetEditAnalysis, OutputGetScores, OutputInit, PgsWorkerStruct,
         VariantInfo, VariantSampleInfo,
     },
@@ -1031,7 +1031,7 @@ impl PageState {
                     Output::GetScores(_) | Output::GetEditAnalysis(_) => unreachable!(),
                 }
             })
-            .spawn("/worker2.js");
+            .spawn("/pgs.js");
 
         bridge.send(Input::Set {
             pgs_id,

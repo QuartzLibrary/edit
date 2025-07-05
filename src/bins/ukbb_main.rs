@@ -1,7 +1,7 @@
 use gloo_worker::Registrable;
 use leptos::task::Executor;
 
-use edit::pgs_catalog_worker::PgsWorkerStruct;
+use edit::ukbb_worker::WorkerStruct;
 
 fn main() {
     console_error_panic_hook::set_once();
@@ -10,7 +10,7 @@ fn main() {
 
     _ = Executor::init_wasm_bindgen();
 
-    PgsWorkerStruct::registrar().register();
+    WorkerStruct::registrar().register();
 
     log::info!("[Worker] Init");
 }
