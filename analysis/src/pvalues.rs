@@ -2,16 +2,14 @@ use std::collections::BTreeMap;
 
 use genomes1000::{
     pedigree::{Pedigree, Sex},
-    resource::Genomes1000Resource,
     simplified::SimplifiedRecord,
 };
 use hail::contig::GRCh38Contig;
 use ordered_float::NotNan;
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
 use serde::{Deserialize, Serialize};
-use utile::resource::RawResourceExt;
 
-use crate::util::SummaryStatKey;
+use crate::util::{SummaryStatKey, load_pedigrees};
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[derive(Serialize, Deserialize)]
@@ -37,16 +35,8 @@ pub struct SampleGenotype {
 
 impl PhenotypeTopPValues {
     pub async fn new(phenotype: PhenotypeManifestEntry) -> Self {
-        let pedigrees = Genomes1000Resource::high_coverage_pedigree()
-            .log_progress()
-            .with_global_fs_cache()
-            .ensure_cached_async()
+        let samples: BTreeMap<String, Pedigree> = load_pedigrees()
             .await
-            .unwrap();
-
-        let samples: BTreeMap<String, Pedigree> = genomes1000::load_pedigree(pedigrees)
-            .await
-            .unwrap()
             .into_iter()
             .map(|p| (p.id.clone(), p))
             .collect();

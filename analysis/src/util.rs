@@ -1,3 +1,4 @@
+use serde::{Deserialize, Serialize};
 use std::{cmp::Ordering, mem, ops::Deref, sync::Arc};
 
 use biocore::{
@@ -5,9 +6,21 @@ use biocore::{
     location::ContigPosition,
     sequence::AsciiChar,
 };
+use genomes1000::{pedigree::Pedigree, resource::Genomes1000Resource};
 use hail::contig::GRCh38Contig;
 use pan_ukbb::{PhenotypeManifestEntry, Population, SummaryStats};
-use serde::{Deserialize, Serialize};
+use utile::resource::RawResourceExt;
+
+pub async fn load_pedigrees() -> Vec<Pedigree> {
+    let pedigrees = Genomes1000Resource::high_coverage_pedigree()
+        .log_progress()
+        .with_global_fs_cache()
+        .ensure_cached_async()
+        .await
+        .unwrap();
+
+    genomes1000::load_pedigree(pedigrees).await.unwrap()
+}
 
 #[derive(Debug, Clone, Copy)]
 #[derive(Serialize, Deserialize)]

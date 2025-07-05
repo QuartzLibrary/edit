@@ -1,7 +1,9 @@
+use serde::{Deserialize, Serialize};
 use std::{
     cell::LazyCell,
     cmp::Ordering,
     collections::{BTreeSet, HashMap},
+    hash::Hash,
     ops::Range,
     sync::Arc,
 };
@@ -9,17 +11,13 @@ use std::{
 use biocore::location::ContigPosition;
 use genomes1000::{
     pedigree::{Pedigree, Sex},
-    resource::Genomes1000Resource,
     simplified::SimplifiedRecord,
 };
 use hail::contig::GRCh38Contig;
 use ordered_float::NotNan;
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
-use serde::{Deserialize, Serialize};
-use std::hash::Hash;
-use utile::resource::RawResourceExt;
 
-use crate::util::{MArc, Stats, SummaryStatKey, mean, std_dev};
+use crate::util::{MArc, Stats, SummaryStatKey, load_pedigrees, mean, std_dev};
 
 const EDIT_COUNT: usize = 100;
 
@@ -64,17 +62,9 @@ pub struct Variant {
 
 impl Scores {
     pub async fn new(phenotype: PhenotypeManifestEntry) -> Self {
-        let pedigrees = Genomes1000Resource::high_coverage_pedigree()
-            .log_progress()
-            .with_global_fs_cache()
-            .ensure_cached_async()
+        let mut scores: HashMap<String, Score> = HashMap::with_capacity(4_000);
+        load_pedigrees()
             .await
-            .unwrap();
-
-        let mut scores: HashMap<String, Score> = HashMap::with_capacity(20_000);
-        genomes1000::load_pedigree(pedigrees)
-            .await
-            .unwrap()
             .into_iter()
             .map(|p| (p.id.clone(), Score::new(p)))
             .collect_into(&mut scores);
