@@ -27,6 +27,9 @@ pub fn home() -> impl IntoView {
             })
         },
         || {
+            if true {
+                return ().into_any();
+            }
             let metadata: ArcRwSignal<_> = crate::METADATA.with(|m| (**m).clone());
             metadata.with(|metadata| match metadata {
                 Some(Ok(metadata)) => metadata
