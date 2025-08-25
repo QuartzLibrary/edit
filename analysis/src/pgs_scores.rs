@@ -22,7 +22,7 @@ use utile::collections::counting_set::CountingBTreeSet;
 
 use crate::util::{MArc, Stats, load_pedigrees, mean, std_dev};
 
-const EDIT_COUNT: usize = 1_000;
+const EDIT_COUNT: usize = 100;
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
 #[derive(Serialize, Deserialize)]
