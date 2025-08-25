@@ -14,6 +14,15 @@ jobs:
   clippy:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (no ./data)
+        with:
+          # include everything, then exclude the folder
+          sparse-checkout: |
+            /*
+            !data/**
+          sparse-checkout-cone-mode: false   # needed for '!' patterns
+        uses: actions/checkout@v4
+
       - name: Set up cache
         uses: actions/cache@v3
         with:

@@ -20,6 +20,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout (no ./data)
+        with:
+          # include everything, then exclude the folder
+          sparse-checkout: |
+            /*
+            !data/**
+          sparse-checkout-cone-mode: false   # needed for '!' patterns
+        uses: actions/checkout@v4
+
       - name: Set up cache
         uses: actions/cache@v3
         with:
@@ -39,6 +48,9 @@ jobs:
 
       - name: Install trunk
         run: cargo install --version 0.18.3 trunk
+
+      - name: Fill ./data in
+        run: git sparse-checkout disable
 
       - name: Build project
         # run: trunk build --release --verbose --public-url /${{ github.event.repository.name }}
