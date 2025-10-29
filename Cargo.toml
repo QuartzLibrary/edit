@@ -24,11 +24,11 @@ path = "src/bins/pgs_main.rs"
 [dependencies]
 analysis = { path = "analysis" }
 
-biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
-hail = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
-pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
-pgs_catalog = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
-utile = { git = "https://github.com/QuartzLibrary/bio", rev = "e6f6e97037ff224d90016088c11c086ea7fa878d" }
+biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
+hail = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
+pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
+pgs_catalog = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
+utile = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
 
 leptos_ext = { git = "https://github.com/QuartzLibrary/leptos_ext", rev = "84e0be960509f1ed08a049cf785972f85234f575" }
 

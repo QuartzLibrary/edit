@@ -1,5 +1,3 @@
-#![feature(let_chains)]
-
 use biocore::{dna::IupacDnaBase, location::ContigRange};
 use futures::{StreamExt, stream};
 use std::{path::PathBuf, sync::LazyLock};

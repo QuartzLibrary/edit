@@ -323,26 +323,27 @@ impl Score {
                 self.worst.truncate(EDIT_COUNT);
             }
         }
-        if let Some(max_hq) = max_hq {
-            if self.best_bound_hq() < max_hq {
-                let i = self
-                    .best_hq
-                    .partition_point(|v| v.max_edit_hq.unwrap() >= max_hq);
-                if i < EDIT_COUNT {
-                    self.best_hq.insert(i, v.clone());
-                    self.best_hq.truncate(EDIT_COUNT);
-                }
+        if let Some(max_hq) = max_hq
+            && self.best_bound_hq() < max_hq
+        {
+            let i = self
+                .best_hq
+                .partition_point(|v| v.max_edit_hq.unwrap() >= max_hq);
+            if i < EDIT_COUNT {
+                self.best_hq.insert(i, v.clone());
+                self.best_hq.truncate(EDIT_COUNT);
             }
         }
-        if let Some(min_hq) = min_hq {
-            if min_hq < self.worst_bound_hq() {
-                let i = self
-                    .worst_hq
-                    .partition_point(|v| v.min_edit_hq.unwrap() <= min_hq);
-                if i < EDIT_COUNT {
-                    self.worst_hq.insert(i, v.clone());
-                    self.worst_hq.truncate(EDIT_COUNT);
-                }
+
+        if let Some(min_hq) = min_hq
+            && min_hq < self.worst_bound_hq()
+        {
+            let i = self
+                .worst_hq
+                .partition_point(|v| v.min_edit_hq.unwrap() <= min_hq);
+            if i < EDIT_COUNT {
+                self.worst_hq.insert(i, v.clone());
+                self.worst_hq.truncate(EDIT_COUNT);
             }
         }
     }

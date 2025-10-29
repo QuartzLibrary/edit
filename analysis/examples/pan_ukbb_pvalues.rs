@@ -1,5 +1,3 @@
-#![feature(let_chains)]
-
 mod pan_ukbb_shared;
 
 use std::{cmp::Ordering, collections::BTreeSet};
