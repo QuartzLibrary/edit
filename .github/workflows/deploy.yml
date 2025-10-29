@@ -97,7 +97,7 @@ jobs:
         run: rustup target add wasm32-unknown-unknown
 
       - name: Install trunk
-        run: cargo install --version 0.18.3 trunk
+        run: cargo install --locked trunk@0.18.3
 
       - name: Fill ./data in
         run: git sparse-checkout disable
