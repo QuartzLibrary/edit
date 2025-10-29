@@ -2,7 +2,7 @@
 
 mod render;
 
-use leptos::{ev, html, prelude::*, IntoView, *};
+use leptos::{IntoView, ev, html, prelude::*, *};
 use leptos_ext::{signal::ReadSignalExt, util::SharedBox};
 use pgs_catalog::PgsId;
 use std::{io, sync::LazyLock};

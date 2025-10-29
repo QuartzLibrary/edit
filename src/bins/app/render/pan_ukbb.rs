@@ -1,10 +1,11 @@
 use gloo_worker::{Spawnable, WorkerBridge};
 use leptos::{
+    IntoView,
     attr::Attribute,
     ev,
     html::{self},
     prelude::*,
-    view, IntoView,
+    view,
 };
 use leptos_ext::{
     signal::{Load, ReadSignalExt, WriteSignalExt},
@@ -12,9 +13,9 @@ use leptos_ext::{
 };
 use ordered_float::NotNan;
 use plotly::{
+    Plot,
     configuration::DisplayModeBar,
     layout::{Shape, ShapeLine},
-    Plot,
 };
 use std::{
     sync::{Arc, Mutex},
@@ -136,7 +137,7 @@ pub fn score_page(file: String) -> impl IntoView {
     }
 }
 
-fn render_main_chart(state: &PageState, data: Signal<OutputGetScores>) -> impl IntoView {
+fn render_main_chart(state: &PageState, data: Signal<OutputGetScores>) -> impl IntoView + use<> {
     const DEEP_SKY_BLUE: &str = "#00BFFF";
     const HOT_PINK: &str = "#FF69B4";
     const LIME_GREEN: &str = "#32CD32";
@@ -313,7 +314,7 @@ fn render_main_chart(state: &PageState, data: Signal<OutputGetScores>) -> impl I
     render_plotly(chart)
 }
 
-fn render_controls(state: &PageState) -> impl IntoView {
+fn render_controls(state: &PageState) -> impl IntoView + use<> {
     const EDIT_COUNT_TIP: &str = "The number of edits to apply to the samples.";
     const TOP_PVALUES_TIP: &str = "Pick the edits only from the top-n variants with the lowest p-values. Set to 0 to pick from all variants.";
 
@@ -329,9 +330,21 @@ fn render_controls(state: &PageState) -> impl IntoView {
 
     let buttons = [
         (use_hq, "Use HQ", "Use the HQ fields from the PanUKBB data."),
-        (normalise, "Normalise", "Normalise the scores to the range of the original data."),
-        (show_stats, "Show stats", "Show some summary statistics in the chart above."),
-        (full_range, "Full range", "Force the chart to show the full range of edits (makes it easert to eyeball the shift in the distribution)."),
+        (
+            normalise,
+            "Normalise",
+            "Normalise the scores to the range of the original data.",
+        ),
+        (
+            show_stats,
+            "Show stats",
+            "Show some summary statistics in the chart above.",
+        ),
+        (
+            full_range,
+            "Full range",
+            "Force the chart to show the full range of edits (makes it easert to eyeball the shift in the distribution).",
+        ),
     ];
 
     html::div().class("card controls").child((
@@ -450,7 +463,7 @@ fn render_full_phenotype_info(
     loading: Signal<bool>,
     use_hq: bool,
     normalise: bool,
-) -> impl IntoView {
+) -> impl IntoView + use<> {
     fn label_value(label: &str, value: impl IntoView) -> impl IntoView {
         html::div().class("info-item").child((
             html::span().class("info-label").child(label.to_string()),
@@ -955,7 +968,7 @@ fn edit_table_line(
     variant_info: &VariantInfo,
     use_hq: bool,
     loading: ArcSignal<bool>,
-) -> impl IntoView {
+) -> impl IntoView + use<> {
     let SummaryStats {
         chr,
         pos,
@@ -1002,7 +1015,9 @@ fn edit_table_line(
         ("p-value:\u{00A0}10", -*p_value)
     };
 
-    let gnomad_link = format!("https://gnomad.broadinstitute.org/variant/{chr}-{pos}-{ref_allele}-{alt}?dataset=gnomad_r4");
+    let gnomad_link = format!(
+        "https://gnomad.broadinstitute.org/variant/{chr}-{pos}-{ref_allele}-{alt}?dataset=gnomad_r4"
+    );
 
     html::div()
         .class("card edit-item")

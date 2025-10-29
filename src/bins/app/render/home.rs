@@ -1,7 +1,7 @@
 use leptos::{
+    IntoView,
     html::{self},
     prelude::*,
-    IntoView,
 };
 
 use pan_ukbb::PhenotypeManifestEntry;
@@ -47,7 +47,7 @@ pub fn home() -> impl IntoView {
         },
     ))
 }
-fn manifest_entry(entry: &PhenotypeManifestEntry) -> impl IntoView {
+fn manifest_entry(entry: &PhenotypeManifestEntry) -> impl IntoView + use<> {
     let PhenotypeManifestEntry {
         trait_type,
         phenocode,
@@ -97,7 +97,7 @@ fn manifest_entry(entry: &PhenotypeManifestEntry) -> impl IntoView {
         )
 }
 
-fn metadata_entry(score: &pgs_catalog::metadata::Score) -> impl IntoView {
+fn metadata_entry(score: &pgs_catalog::metadata::Score) -> impl IntoView + use<> {
     let pgs_catalog::metadata::Score {
         id,
         name,

@@ -5,7 +5,7 @@ pub mod files;
 
 use gloo_worker::{HandlerId, Worker, WorkerScope};
 use ordered_float::NotNan;
-use pgs_catalog::{metadata::Metadata, PgsId};
+use pgs_catalog::{PgsId, metadata::Metadata};
 use serde::{Deserialize, Serialize};
 use std::{fmt::Debug, ops::Range};
 
@@ -16,7 +16,7 @@ use analysis::{
     util::Stats,
 };
 
-use crate::util::{spawn_task, AsJson};
+use crate::util::{AsJson, spawn_task};
 
 use self::globals::*;
 

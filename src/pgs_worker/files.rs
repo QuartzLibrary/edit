@@ -1,5 +1,5 @@
 use gloo_worker::HandlerId;
-use pgs_catalog::{metadata::Metadata, PgsId};
+use pgs_catalog::{PgsId, metadata::Metadata};
 use std::io;
 
 use analysis::pgs_scores::PgsCatalogScores;

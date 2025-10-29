@@ -1,7 +1,7 @@
 use futures::stream::{AbortHandle, Abortable};
 use gloo_worker::HandlerId;
 use leptos::prelude::{ArcRwSignal, ArcSignal, Get, Set, StoredValue};
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use std::{
     cell::RefCell,
     cmp::Ordering,
@@ -12,7 +12,7 @@ use std::{
     thread::LocalKey,
     time::Duration,
 };
-use wasm_bindgen::{prelude::Closure, JsCast};
+use wasm_bindgen::{JsCast, prelude::Closure};
 use web_sys::{self, MediaQueryListEvent};
 
 use utile::{
@@ -44,7 +44,10 @@ fn media_query_signal(query: &str) -> ArcSignal<bool> {
     signal.into()
 }
 
-fn on_media_query(query: &str, mut f: impl FnMut(bool) + 'static) -> ExecuteOnDrop<impl FnOnce()> {
+fn on_media_query(
+    query: &str,
+    mut f: impl FnMut(bool) + 'static,
+) -> ExecuteOnDrop<impl FnOnce() + 'static> {
     let media_query_list = web_sys::window()
         .unwrap()
         .match_media(query)

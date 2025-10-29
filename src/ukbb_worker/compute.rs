@@ -12,11 +12,11 @@ use analysis::{
     util::{Stats, SummaryStatKey},
 };
 
-use crate::util::{yield_now, AsJson};
+use crate::util::{AsJson, yield_now};
 
 use super::{
-    globals::{scores, top_pvalue_variants},
     OutputGetEditAnalysis, OutputGetScores, VariantInfo, VariantSampleInfo,
+    globals::{scores, top_pvalue_variants},
 };
 
 /// `async` to give it a chance to be interrupted.
@@ -207,11 +207,7 @@ fn get_top_edits<'a>(
 
     edits.sort_unstable_by_key(|(s, g)| {
         let edit = actual_edit(s, *g, use_hq, edit_count).unwrap();
-        if positive_edits {
-            -edit
-        } else {
-            edit
-        }
+        if positive_edits { -edit } else { edit }
     });
 
     edits.truncate(edit_count.unsigned_abs());

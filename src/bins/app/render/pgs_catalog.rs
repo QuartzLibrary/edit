@@ -1,10 +1,11 @@
 use gloo_worker::{Spawnable, WorkerBridge};
 use leptos::{
+    IntoView,
     attr::Attribute,
     ev,
     html::{self},
     prelude::*,
-    view, IntoView,
+    view,
 };
 use leptos_ext::{
     signal::{Load, ReadSignalExt, WriteSignalExt},
@@ -12,14 +13,14 @@ use leptos_ext::{
 };
 use ordered_float::NotNan;
 use pgs_catalog::{
+    PgsId,
     metadata::{Metadata, PerformanceMetric, Publication, ScoreDevelopmentSample},
     simplified::SimplifiedHarmonizedStudyAssociation,
-    PgsId,
 };
 use plotly::{
+    Plot,
     configuration::DisplayModeBar,
     layout::{Shape, ShapeLine},
-    Plot,
 };
 use std::{
     sync::{Arc, Mutex},
@@ -29,7 +30,7 @@ use thaw::*;
 use web_sys;
 
 use analysis::{
-    pgs_scores::{parse_contig, Association},
+    pgs_scores::{Association, parse_contig},
     util::Stats,
 };
 
@@ -132,7 +133,7 @@ pub fn score_page(pgs_id: PgsId) -> impl IntoView {
     }
 }
 
-fn render_main_chart(state: &PageState, data: Signal<OutputGetScores>) -> impl IntoView {
+fn render_main_chart(state: &PageState, data: Signal<OutputGetScores>) -> impl IntoView + use<> {
     const DEEP_SKY_BLUE: &str = "#00BFFF";
     const HOT_PINK: &str = "#FF69B4";
     const LIME_GREEN: &str = "#32CD32";
@@ -303,7 +304,7 @@ fn render_main_chart(state: &PageState, data: Signal<OutputGetScores>) -> impl I
     render_plotly(chart)
 }
 
-fn render_controls(state: &PageState) -> impl IntoView {
+fn render_controls(state: &PageState) -> impl IntoView + use<> {
     const EDIT_COUNT_TIP: &str = "The number of edits to apply to the samples.";
 
     let PageState {
@@ -316,9 +317,21 @@ fn render_controls(state: &PageState) -> impl IntoView {
     } = state.clone();
 
     let buttons = [
-        (normalise, "Normalise", "Normalise the scores to the range of the original data."),
-        (show_stats, "Show stats", "Show some summary statistics in the chart above."),
-        (full_range, "Full range", "Force the chart to show the full range of edits (makes it easert to eyeball the shift in the distribution)."),
+        (
+            normalise,
+            "Normalise",
+            "Normalise the scores to the range of the original data.",
+        ),
+        (
+            show_stats,
+            "Show stats",
+            "Show some summary statistics in the chart above.",
+        ),
+        (
+            full_range,
+            "Full range",
+            "Force the chart to show the full range of edits (makes it easert to eyeball the shift in the distribution).",
+        ),
     ];
 
     let edit_limit = init
@@ -406,7 +419,7 @@ fn render_full_phenotype_info(
     data: Load<Option<ArcRwSignal<OutputGetScores>>>,
     loading: Signal<bool>,
     normalise: bool,
-) -> impl IntoView {
+) -> impl IntoView + use<> {
     fn label_value(label: &str, value: impl IntoView) -> impl IntoView {
         html::div().class("info-item").child((
             html::span().class("info-label").child(label.to_string()),
@@ -451,7 +464,7 @@ fn render_full_phenotype_info(
                 )),
             ))
     }
-    fn view_development_sample(sample: &ScoreDevelopmentSample) -> impl IntoView {
+    fn view_development_sample(sample: &ScoreDevelopmentSample) -> impl IntoView + use<> {
         html::div().class("population-item").child((
             html::h3().child(sample.stage_of_pgs_development.to_string()),
             html::div().class("population-details").child((
@@ -479,7 +492,7 @@ fn render_full_phenotype_info(
             )),
         ))
     }
-    fn view_metric(metric: &PerformanceMetric) -> impl IntoView {
+    fn view_metric(metric: &PerformanceMetric) -> impl IntoView + use<> {
         html::div().class("performance-metric").child((
             html::h3().child(format!("Metric ID: {}", metric.id)),
             html::div().class("metric-details").child((
@@ -528,7 +541,7 @@ fn render_full_phenotype_info(
             )),
         ))
     }
-    fn view_publication(pub_info: &Publication) -> impl IntoView {
+    fn view_publication(pub_info: &Publication) -> impl IntoView + use<> {
         html::div().class("info-item").child((
             html::span()
                 .class("info-label")
@@ -868,7 +881,7 @@ fn render_edit_analysis_chart(
     render_plotly(chart)
 }
 
-fn edit_table_line(variant_info: &VariantInfo, loading: ArcSignal<bool>) -> impl IntoView {
+fn edit_table_line(variant_info: &VariantInfo, loading: ArcSignal<bool>) -> impl IntoView + use<> {
     let VariantInfo {
         count: _,
         association:
@@ -937,7 +950,9 @@ fn edit_table_line(variant_info: &VariantInfo, loading: ArcSignal<bool>) -> impl
         }
     };
 
-    let gnomad_link = format!("https://gnomad.broadinstitute.org/variant/{chr}-{pos}-{reference_allele}-{effect_allele}?dataset=gnomad_r4");
+    let gnomad_link = format!(
+        "https://gnomad.broadinstitute.org/variant/{chr}-{pos}-{reference_allele}-{effect_allele}?dataset=gnomad_r4"
+    );
 
     html::div()
         .class("card edit-item")

@@ -17,7 +17,7 @@ use analysis::{
     util::{Stats, SummaryStatKey},
 };
 
-use crate::util::{spawn_task, AsJson};
+use crate::util::{AsJson, spawn_task};
 
 use self::globals::*;
 

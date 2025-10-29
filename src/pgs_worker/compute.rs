@@ -7,7 +7,7 @@ use analysis::util::Stats;
 use crate::util::yield_now;
 
 use super::{
-    globals::scores, OutputGetEditAnalysis, OutputGetScores, VariantInfo, VariantSampleInfo,
+    OutputGetEditAnalysis, OutputGetScores, VariantInfo, VariantSampleInfo, globals::scores,
 };
 
 /// `async` to give it a chance to be interrupted.

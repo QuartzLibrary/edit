@@ -8,7 +8,7 @@ use analysis::{
     util::Stats,
 };
 
-use crate::util::{wait_for, HandlerIdOrd};
+use crate::util::{HandlerIdOrd, wait_for};
 
 thread_local! {
     pub static SCORES_TASK: RefCell<Option<(HandlerIdOrd, AbortHandle)>> = const { RefCell::new(None) };
