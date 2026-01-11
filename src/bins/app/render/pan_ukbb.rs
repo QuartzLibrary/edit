@@ -22,6 +22,7 @@ use std::{
     time::Duration,
 };
 use thaw::*;
+use utile::any::AnyMap;
 use web_sys;
 
 use pan_ukbb::{PhenotypeManifestEntry, Population, SummaryStats};
@@ -394,7 +395,8 @@ fn render_controls(state: &PageState) -> impl IntoView + use<> {
             1.0,
             "any",
             Some(TOP_PVALUES_TIP),
-        ),
+        )
+        .any_map(|_| ()), // Do no display
         html::div()
             .class("controls-row")
             .child(buttons.map(|(signal, label, tip)| toggle_button(signal, label, Some(tip)))),
@@ -1134,7 +1136,7 @@ impl PageState {
             edit_count: RwSignal::new(0),
             use_hq: RwSignal::new(false),
             normalise: RwSignal::new(false),
-            top_pvalues: RwSignal::new(100),
+            top_pvalues: RwSignal::new(0),
 
             show_stats: RwSignal::new(false),
             full_range: RwSignal::new(false),
