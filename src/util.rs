@@ -1,6 +1,14 @@
 use futures::stream::{AbortHandle, Abortable};
 use gloo_worker::HandlerId;
-use leptos::prelude::{ArcRwSignal, ArcSignal, Get, Set, StoredValue};
+use leptos::{
+    attr::Attribute,
+    html,
+    prelude::{
+        ArcRwSignal, ArcSignal, Effect, Get, GlobalAttributes, LocalStorage, RenderHtml, Set,
+        Signal, StoredValue, StyleAttribute,
+    },
+};
+use plotly::configuration::DisplayModeBar;
 use serde::{Deserialize, Serialize, de::DeserializeOwned};
 use std::{
     cell::RefCell,
@@ -236,4 +244,45 @@ pub fn spawn_task(
             }
         });
     });
+}
+
+pub fn render_plotly(
+    plot: Signal<plotly::Plot, LocalStorage>,
+) -> html::HtmlElement<html::Div, impl Attribute + Clone, impl RenderHtml + Clone> {
+    let id = format!("plot_{}", rand::random::<u64>());
+
+    Effect::new({
+        let id = id.clone();
+        move || {
+            let mut plot = plot.get();
+            plot.set_configuration(
+                plot.configuration()
+                    .clone()
+                    .responsive(true)
+                    .display_mode_bar(DisplayModeBar::False)
+                    .display_logo(false)
+                    .typeset_math(true),
+            );
+
+            let id = id.clone();
+            let plot_update_task = async move {
+                if document().get_element_by_id(&id).is_none() {
+                    log::warn!("[App][Chart][{id}] Plot element not found");
+                    return;
+                }
+
+                log::info!("[App][Chart][{id}] Updating plot");
+                plotly::bindings::react(&id, &plot).await;
+                log::info!("[App][Chart][{id}] Plot updated successfully");
+            };
+            // TODO: proper `defer` so it's cleaned up automatically.
+            wasm_bindgen_futures::spawn_local(plot_update_task);
+        }
+    });
+
+    html::div().id(id).style("width: 100%; height: 100%;")
+}
+
+fn document() -> web_sys::Document {
+    web_sys::window().unwrap().document().unwrap()
 }

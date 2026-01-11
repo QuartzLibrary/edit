@@ -1,8 +1,6 @@
 use gloo_worker::{Spawnable, WorkerBridge};
 use leptos::{
-    IntoView,
-    attr::Attribute,
-    ev,
+    IntoView, ev,
     html::{self},
     prelude::*,
     view,
@@ -17,17 +15,12 @@ use pgs_catalog::{
     metadata::{Metadata, PerformanceMetric, Publication, ScoreDevelopmentSample},
     simplified::SimplifiedHarmonizedStudyAssociation,
 };
-use plotly::{
-    Plot,
-    configuration::DisplayModeBar,
-    layout::{Shape, ShapeLine},
-};
+use plotly::layout::{Shape, ShapeLine};
 use std::{
     sync::{Arc, Mutex},
     time::Duration,
 };
 use thaw::*;
-use web_sys;
 
 use analysis::{
     pgs_scores::{Association, parse_contig},
@@ -40,7 +33,7 @@ use edit::{
         VariantInfo, VariantSampleInfo,
     },
     send_option::SendOption,
-    util::{AsJson, PLOTLY_THEME},
+    util::{AsJson, PLOTLY_THEME, render_plotly},
 };
 
 const BINS: usize = 100;
@@ -983,43 +976,6 @@ fn edit_table_line(variant_info: &VariantInfo, loading: ArcSignal<bool>) -> impl
         ))
 }
 
-fn render_plotly(
-    plot: Signal<Plot, LocalStorage>,
-) -> html::HtmlElement<html::Div, impl Attribute + Clone, impl RenderHtml + Clone> {
-    let id = format!("plot_{}", rand::random::<u64>());
-
-    Effect::new({
-        let id = id.clone();
-        move || {
-            let mut plot = plot.get();
-            plot.set_configuration(
-                plot.configuration()
-                    .clone()
-                    .responsive(true)
-                    .display_mode_bar(DisplayModeBar::False)
-                    .display_logo(false)
-                    .typeset_math(true),
-            );
-
-            let id = id.clone();
-            let plot_update_task = async move {
-                if document().get_element_by_id(&id).is_none() {
-                    log::warn!("[App][Chart][{id}] Plot element not found");
-                    return;
-                }
-
-                log::info!("[App][Chart][{id}] Updating plot");
-                plotly::bindings::react(&id, &plot).await;
-                log::info!("[App][Chart][{id}] Plot updated successfully");
-            };
-            // TODO: proper `defer` so it's cleaned up automatically.
-            wasm_bindgen_futures::spawn_local(plot_update_task);
-        }
-    });
-
-    html::div().id(id).style("width: 100%; height: 100%;")
-}
-
 fn toggle_button(
     signal: RwSignal<bool>,
     label: &'static str,
@@ -1191,8 +1147,4 @@ async fn query_bridge(bridge: &SendOption<WorkerBridge<PgsWorkerStruct>>, input:
         start.elapsed().as_millis()
     );
     output
-}
-
-fn document() -> web_sys::Document {
-    web_sys::window().unwrap().document().unwrap()
 }
