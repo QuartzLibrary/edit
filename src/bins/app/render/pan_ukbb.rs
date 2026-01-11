@@ -28,7 +28,7 @@ use edit::{
         Input, Output, OutputGetEditAnalysis, OutputGetScores, OutputInit, VariantInfo,
         VariantSampleInfo, WorkerStruct,
     },
-    util::{PLOTLY_THEME, render_plotly},
+    util::{PLOTLY_THEME, render_edit_frequency_histogram, render_plotly},
 };
 
 const BINS: usize = 100;
@@ -815,10 +815,12 @@ fn render_edit_analysis_panel(
                     .class("loading-text")
                     .child("Apply at least one edit.")
                     .into_any(),
-                Load::Ready(Some(analysis)) => {
-                    render_edit_analysis_chart(edit_count, init.sample_count, analysis.into())
-                        .into_any()
-                }
+                Load::Ready(Some(analysis)) => render_edit_frequency_histogram(
+                    edit_count,
+                    init.sample_count,
+                    analysis.map(|a| a.edits.iter().map(|v| v.count).collect()),
+                )
+                .into_any(),
             }),
         html::div().class("card sort-settings").child((
             "Sort by: ",
@@ -905,58 +907,6 @@ where
             Some(view.take().unwrap()())
         }
     }
-}
-
-fn render_edit_analysis_chart(
-    edit_count: Signal<isize>,
-    sample_count: usize,
-    analysis: Signal<OutputGetEditAnalysis>,
-) -> impl IntoView {
-    let sample_count = sample_count as f64;
-    let chart = Signal::derive_local(move || {
-        // Untracked to avoid re-rendering before the data is ready. (Always trigger a change in the data.)
-        let edit_count = edit_count.get_untracked();
-
-        let counts: Vec<f64> = analysis
-            .get()
-            .edits
-            .iter()
-            .map(|variant_info| variant_info.count as f64)
-            .map(|c| c / sample_count)
-            .collect();
-
-        let variant_count = analysis.get().edits.len();
-
-        let mut plot = plotly::Plot::new();
-        plot.add_trace(
-            plotly::Histogram::new(counts.clone())
-                .n_bins_x(100)
-                .name("Edit Frequency Distribution"),
-        );
-        plot.set_layout(
-            plotly::Layout::new()
-                .template(PLOTLY_THEME.get())
-                .x_axis(
-                    plotly::layout::Axis::new()
-                        .title(format!("Frequency in top {edit_count} edits"))
-                        .tick_format(".0%"),
-                )
-                .y_axis(
-                    plotly::layout::Axis::new()
-                        .title(format!("Number of variants ({variant_count} total)")),
-                )
-                .margin(
-                    plotly::layout::Margin::new()
-                        .top(60)
-                        .right(60)
-                        .bottom(60)
-                        .left(60),
-                ),
-        );
-        plot
-    });
-
-    render_plotly(chart)
 }
 
 fn edit_table_line(

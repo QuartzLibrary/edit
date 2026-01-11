@@ -1,11 +1,12 @@
 use futures::stream::{AbortHandle, Abortable};
 use gloo_worker::HandlerId;
 use leptos::{
+    IntoView,
     attr::Attribute,
     html,
     prelude::{
-        ArcRwSignal, ArcSignal, Effect, Get, GlobalAttributes, LocalStorage, RenderHtml, Set,
-        Signal, StoredValue, StyleAttribute,
+        ArcRwSignal, ArcSignal, Effect, Get, GetUntracked, GlobalAttributes, LocalStorage,
+        RenderHtml, Set, Signal, StoredValue, StyleAttribute,
     },
 };
 use plotly::configuration::DisplayModeBar;
@@ -244,6 +245,61 @@ pub fn spawn_task(
             }
         });
     });
+}
+
+/// Renders the counts of the frequency of the edits across the samples.
+///
+/// For example: 10 variants are present in 30% of the samples.
+pub fn render_edit_frequency_histogram(
+    edit_count: Signal<isize>,
+    number_of_samples: usize,
+    variant_edit_counts: Signal<Vec<usize>>, // For each variant, the number of samples it is present in.
+) -> impl IntoView {
+    let number_of_samples = number_of_samples as f64;
+    let chart = Signal::derive_local(move || {
+        // Untracked to avoid re-rendering before the data is ready. (Always trigger a change in the data.)
+        let edit_count = edit_count.get_untracked();
+
+        let variant_edit_counts = variant_edit_counts.get();
+
+        let counts: Vec<f64> = variant_edit_counts
+            .iter()
+            .map(|count| *count as f64)
+            .map(|c| c / number_of_samples)
+            .collect();
+
+        let variant_count = variant_edit_counts.len();
+
+        let mut plot = plotly::Plot::new();
+        plot.add_trace(
+            plotly::Histogram::new(counts.clone())
+                .n_bins_x(100)
+                .name("Edit Frequency Distribution"),
+        );
+        plot.set_layout(
+            plotly::Layout::new()
+                .template(PLOTLY_THEME.get())
+                .x_axis(
+                    plotly::layout::Axis::new()
+                        .title(format!("Frequency in top {edit_count} edits"))
+                        .tick_format(".0%"),
+                )
+                .y_axis(
+                    plotly::layout::Axis::new()
+                        .title(format!("Number of variants ({variant_count} total)")),
+                )
+                .margin(
+                    plotly::layout::Margin::new()
+                        .top(60)
+                        .right(60)
+                        .bottom(60)
+                        .left(60),
+                ),
+        );
+        plot
+    });
+
+    render_plotly(chart)
 }
 
 pub fn render_plotly(
