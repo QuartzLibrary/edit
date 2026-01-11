@@ -11,22 +11,6 @@ pub fn home() -> impl IntoView {
         html::h1().child("Index"),
         html::p().inner_html(include_str!("intro.html")),
         || {
-            let manifest: ArcRwSignal<_> = crate::MANIFEST.with(|m| (**m).clone());
-            manifest.with(|manifest| match manifest {
-                Some(Ok(manifest)) => manifest
-                    .iter()
-                    .filter(|p| analysis::util::passes_qc(p))
-                    .map(manifest_entry)
-                    .collect_view()
-                    .into_any(),
-                Some(Err(e)) => {
-                    log::error!("[App] Error loading manifest: {}", e);
-                    html::p().child("Error loading the manifest.").into_any()
-                }
-                None => html::p().child("Loading…").into_any(),
-            })
-        },
-        || {
             let metadata: ArcRwSignal<_> = crate::METADATA.with(|m| (**m).clone());
             metadata.with(|metadata| match metadata {
                 Some(Ok(metadata)) => metadata
@@ -38,6 +22,22 @@ pub fn home() -> impl IntoView {
                 Some(Err(e)) => {
                     log::error!("[App] Error loading metadata: {}", e);
                     html::p().child("Error loading the metadata.").into_any()
+                }
+                None => html::p().child("Loading…").into_any(),
+            })
+        },
+        || {
+            let manifest: ArcRwSignal<_> = crate::MANIFEST.with(|m| (**m).clone());
+            manifest.with(|manifest| match manifest {
+                Some(Ok(manifest)) => manifest
+                    .iter()
+                    .filter(|p| analysis::util::passes_qc(p))
+                    .map(manifest_entry)
+                    .collect_view()
+                    .into_any(),
+                Some(Err(e)) => {
+                    log::error!("[App] Error loading manifest: {}", e);
+                    html::p().child("Error loading the manifest.").into_any()
                 }
                 None => html::p().child("Loading…").into_any(),
             })
