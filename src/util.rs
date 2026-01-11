@@ -273,7 +273,7 @@ pub fn render_edit_frequency_histogram(
         let mut plot = plotly::Plot::new();
         plot.add_trace(
             plotly::Histogram::new(counts.clone())
-                .n_bins_x(100)
+                .x_bins(plotly::histogram::Bins::new(0., 1., 0.01))
                 .name("Edit Frequency Distribution"),
         );
         plot.set_layout(
@@ -282,7 +282,8 @@ pub fn render_edit_frequency_histogram(
                 .x_axis(
                     plotly::layout::Axis::new()
                         .title(format!("Frequency in top {edit_count} edits"))
-                        .tick_format(".0%"),
+                        .tick_format(".0%")
+                        .range(vec![0., 1.]),
                 )
                 .y_axis(
                     plotly::layout::Axis::new()
