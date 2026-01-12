@@ -9,7 +9,7 @@ use pan_ukbb::PhenotypeManifestEntry;
 pub fn home() -> impl IntoView {
     html::div().class("page-content manifest").child((
         html::h1().child("Index"),
-        html::p().inner_html(include_str!("intro.html")),
+        html::section().inner_html(include_str!("intro.html")),
         || {
             let metadata: ArcRwSignal<_> = crate::METADATA.with(|m| (**m).clone());
             metadata.with(|metadata| match metadata {
