@@ -40,7 +40,8 @@ pub fn home() -> impl IntoView {
                     html::p().child("Error loading the manifest.").into_any()
                 }
                 None => html::p().child("Loading…").into_any(),
-            })
+            });
+            {} // Hide
         },
     ))
 }
