@@ -241,6 +241,58 @@ a:not([class]) {
 
 // Manifest styles
 .manifest {
+  .search-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--spacingHorizontalL);
+    align-items: center;
+
+    margin-left: var(--side-margin);
+    margin-right: var(--side-margin);
+    margin-bottom: var(--spacingVerticalL);
+
+    .search-input {
+      padding: var(--spacingHorizontalS) var(--spacingHorizontalM);
+      background: var(--colorNeutralBackground1);
+      border: var(--strokeWidthThin) solid var(--colorNeutralStroke1);
+      border-radius: var(--borderRadiusMedium);
+      color: var(--colorNeutralForeground1);
+      font-size: var(--fontSizeBase300);
+      transition: border-color var(--durationNormal) var(--curveEasyEase);
+
+      &:focus {
+        outline: none;
+        border-color: var(--colorBrandStroke1);
+      }
+
+      &::placeholder {
+        color: var(--colorNeutralForeground3);
+      }
+    }
+
+    > .search-input {
+      flex: 1;
+      min-width: 200px;
+    }
+
+    .filter-field {
+      display: flex;
+      align-items: center;
+      gap: var(--spacingHorizontalS);
+
+      .field-label {
+        color: var(--colorNeutralForeground3);
+        font-size: var(--fontSizeBase300);
+        font-weight: var(--fontWeightSemibold);
+        white-space: nowrap;
+      }
+
+      .variants-input {
+        width: 100px;
+      }
+    }
+  }
+
   .entry-details {
     display: flex;
     flex-direction: column;
