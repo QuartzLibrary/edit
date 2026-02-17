@@ -1,4 +1,7 @@
-use biocore::{dna::IupacDnaBase, location::ContigRange};
+use biocore::{
+    dna::{DnaSequence, IupacDnaBase, IupacDnaSequence},
+    location::ContigRange,
+};
 use futures::{StreamExt, stream};
 use std::{path::PathBuf, sync::LazyLock};
 
@@ -181,43 +184,109 @@ async fn score(
             association,
         );
 
+        let mut not_ref_genotypes = vec![Genotype::Missing; sample_names.len()];
         for record in genomes1000
             .query_simplified(&at_genomes1000.into())
             .unwrap()
         {
-            if record.at() == at_genomes1000 && record.alternate_allele == simplified.effect_allele
-            {
+            if record.at() != at_genomes1000 {
+                // In theory this could still overlap, but in practice all the
+                // tooling assumes this.
+                continue;
+            }
+
+            if record.alternate_allele == simplified.effect_allele {
+                // If we have found the effect allele, we are done.
+
                 // log::info!("[pgs_scores][{id}] Found match for {at:?}");
                 scores.push_variant(association, &simplified, &sample_names, &record);
                 continue 'association;
             }
+
+            // Otherwise aggregate all the non-reference genotypes so that we can
+            // infer the true reference genotype.
+            for (i, sample) in record.samples.iter().enumerate() {
+                match sample {
+                    Genotype::Missing => {}
+                    Genotype::Haploid(HaploidGenotype { value: 0 }) => {}
+                    Genotype::Diploid(DiploidGenotype {
+                        left: 0,
+                        right: 0,
+                        phasing: _,
+                    }) => {}
+
+                    Genotype::Haploid(HaploidGenotype { value }) => {
+                        match &mut not_ref_genotypes[i] {
+                            Genotype::Missing => not_ref_genotypes[i] = *sample,
+                            Genotype::Haploid(HaploidGenotype {
+                                value: non_ref_value,
+                            }) => {
+                                *non_ref_value += *value;
+                            }
+                            Genotype::Diploid(_) => {
+                                unreachable!("{sample:?}")
+                            }
+                        }
+                    }
+                    Genotype::Diploid(DiploidGenotype {
+                        left,
+                        right,
+                        phasing: _,
+                    }) => match &mut not_ref_genotypes[i] {
+                        Genotype::Missing => not_ref_genotypes[i] = *sample,
+                        Genotype::Diploid(DiploidGenotype {
+                            left: non_ref_left,
+                            right: non_ref_right,
+                            phasing: _,
+                        }) => {
+                            *non_ref_left += *left;
+                            *non_ref_right += *right;
+                        }
+                        Genotype::Haploid(_) => {
+                            unreachable!("{sample:?}")
+                        }
+                    },
+                }
+            }
         }
 
-        if association.reference_allele.len() == simplified.effect_allele.len()
-            && association
-                .reference_allele
-                .iter()
-                .zip(simplified.effect_allele.iter())
-                .all(|(a, b)| a == b)
-        {
+        if eq_seq(&association.reference_allele, &simplified.effect_allele) {
             // log::info!("[pgs_scores][{id}] Found reference fallback match for {at:?}");
 
-            let fallback_genotypes: Vec<Genotype> = sample_names
-                .iter()
-                .map(|name| {
-                    match simplified
-                        .chr
-                        .ploidy(genomes1000.pedigree(name).unwrap().sex)
-                    {
-                        0 => Genotype::Missing,
-                        1 => Genotype::Haploid(HaploidGenotype { value: 0 }),
-                        2 => Genotype::Diploid(DiploidGenotype {
-                            left: 0,
-                            phasing: GenotypePhasing::Phased,
-                            right: 0,
-                        }),
-                        _ => unreachable!(),
+            // The effect allele is the reference allele, so we need to retrieve the
+            // reference genotypes by inverting the aggregation of all the non-reference genotypes.
+
+            let samples = not_ref_genotypes
+                .into_iter()
+                .enumerate()
+                .map(|(i, g)| match g {
+                    Genotype::Missing => {
+                        // No non-reference alleles were seen for this sample
+                        match simplified
+                            .chr
+                            .ploidy(genomes1000.pedigree(&sample_names[i]).unwrap().sex)
+                        {
+                            0 => Genotype::Missing,
+                            1 => Genotype::Haploid(HaploidGenotype { value: 1 }),
+                            2 => Genotype::Diploid(DiploidGenotype {
+                                left: 1,
+                                phasing: GenotypePhasing::Phased,
+                                right: 1,
+                            }),
+                            _ => unreachable!(),
+                        }
                     }
+
+                    // We use saturating sub, because sometimes both A -> T and A -> CCT might
+                    // be in the data (note that CTT ends in T).
+                    Genotype::Haploid(haploid_genotype) => Genotype::Haploid(HaploidGenotype {
+                        value: 1u8.saturating_sub(haploid_genotype.value),
+                    }),
+                    Genotype::Diploid(diploid_genotype) => Genotype::Diploid(DiploidGenotype {
+                        left: 1u8.saturating_sub(diploid_genotype.left),
+                        right: 1u8.saturating_sub(diploid_genotype.right),
+                        phasing: diploid_genotype.phasing,
+                    }),
                 })
                 .collect();
 
@@ -228,7 +297,7 @@ async fn score(
                 alternate_allele: simplified.effect_allele.clone(),
                 quality: None,
                 filter: "".to_string(),
-                samples: fallback_genotypes,
+                samples,
             };
             scores.push_fallback(association, &simplified, &sample_names, &record);
         } else {
@@ -247,6 +316,10 @@ async fn score(
     );
 
     scores
+}
+
+fn eq_seq(a: &IupacDnaSequence, b: &DnaSequence) -> bool {
+    a.len() == b.len() && a.iter().zip(b.iter()).all(|(a, b)| a == b)
 }
 
 async fn load_grch38_reference_genome()
