@@ -931,7 +931,16 @@ fn edit_table_line(variant_info: &VariantInfo, loading: ArcSignal<bool>) -> impl
                         )
                             .into_any()
                     },
-                    rs_id.map(|rs_id| html::span().child(format!("rsID: {rs_id}"))),
+                    rs_id.map(|rs_id| {
+                        html::span().child((
+                            "rsID: ",
+                            html::a()
+                                .attr("href", format!("https://www.ncbi.nlm.nih.gov/snp/{rs_id}"))
+                                .attr("target", "_blank")
+                                .attr("rel", "noopener noreferrer")
+                                .child(format!("{rs_id}")),
+                        ))
+                    }),
                 )),
                 html::div().class("edit-dosage").child((
                     html::span().class("dosage-label").child("Dosage×Ploidy: "),
