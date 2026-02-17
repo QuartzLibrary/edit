@@ -4,14 +4,15 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
-genomes1000 = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
-hail = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
-ids = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
-liftover = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
-pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
-pgs_catalog = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
-utile = { git = "https://github.com/QuartzLibrary/bio", rev = "40e64ca79a13bb754661a1cfbcc0e53c2934a3a2" }
+biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
+genomes1000 = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
+hail = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
+ids = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
+liftover = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
+pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
+pgs_catalog = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
+resource = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
+utile = { git = "https://github.com/QuartzLibrary/bio", rev = "8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd" }
 
 bincode = { version = "2", features = ["serde"] }
 brotli = "8"

@@ -7,11 +7,11 @@ use std::{cmp::Ordering, str::FromStr, sync::LazyLock};
 use genomes1000::simplified::SimplifiedRecord;
 use hail::contig::{GRCh37Contig, GRCh38Contig};
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
-use tokio::task::spawn_blocking;
-use utile::{
-    cache::{FsCache, FsCacheEntry},
-    resource::RawResourceExt,
+use resource::{
+    RawResourceExt,
+    fs::{FsCache, FsCacheEntry},
 };
+use tokio::task::spawn_blocking;
 
 /// Where we put the putput
 pub static DATA_FOLDER: LazyLock<FsCache> =
@@ -55,7 +55,7 @@ pub async fn load_liftover() -> liftover::LiftoverIndexed<GRCh37Contig, GRCh38Co
     spawn_blocking(|| {
         log::info!("[Liftover] Loading");
         let liftover = liftover::Liftover::load(
-            hail::resource::HailCommonResource::grch37_to_grch38_liftover_chain()
+            hail::source::HailCommonResource::grch37_to_grch38_liftover_chain()
                 .log_progress()
                 .with_global_fs_cache(),
         )

@@ -7,12 +7,12 @@ use std::{path::PathBuf, sync::LazyLock};
 
 use genomes1000::{
     DiploidGenotype, Genomes1000Fs, Genotype, GenotypePhasing, HaploidGenotype,
-    contig::GRCh38Contig, resource::Genomes1000Resource, simplified::SimplifiedRecord,
+    contig::GRCh38Contig, simplified::SimplifiedRecord, source::Genomes1000Resource,
 };
 use pgs_catalog::{HarmonizedStudyAssociation, PgsId};
-use utile::{
-    cache::{FsCache, FsCacheEntry},
-    resource::RawResourceExt,
+use resource::{
+    RawResourceExt,
+    fs::{FsCache, FsCacheEntry},
 };
 
 use analysis::{
@@ -47,7 +47,7 @@ async fn main() {
         .filter_level(log::LevelFilter::Debug)
         .filter_module("reqwest", log::LevelFilter::Info)
         .filter_module("hyper_util", log::LevelFilter::Info)
-        .filter_module("utile::resource", log::LevelFilter::Warn)
+        .filter_module("resource", log::LevelFilter::Warn)
         .init();
 
     if !all_metadata_output_path().try_exists().unwrap() {

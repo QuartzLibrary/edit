@@ -9,6 +9,7 @@ rustflags = ['--cfg', 'getrandom_backend="wasm_js"'] # '--cfg', 'leptos_debuginf
 # liftover = { path = "../bio/liftover" }
 # pan_ukbb = { path = "../bio/pan_ukbb" }
 # pgs_catalog = { path = "../bio/pgs_catalog" }
+# resource = { path = "../bio/resource" }
 # utile = { path = "../bio/utile" }
 
 # [patch.'https://github.com/QuartzLibrary/leptos_ext']

@@ -6,10 +6,10 @@ use biocore::{
     location::ContigPosition,
     sequence::AsciiChar,
 };
-use genomes1000::{pedigree::Pedigree, resource::Genomes1000Resource};
+use genomes1000::{pedigree::Pedigree, source::Genomes1000Resource};
 use hail::contig::GRCh38Contig;
 use pan_ukbb::{PhenotypeManifestEntry, Population, SummaryStats};
-use utile::resource::RawResourceExt;
+use resource::RawResourceExt;
 
 pub async fn load_pedigrees() -> Vec<Pedigree> {
     let pedigrees = Genomes1000Resource::high_coverage_pedigree()

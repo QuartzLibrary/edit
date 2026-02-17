@@ -25,7 +25,7 @@ async fn main() {
         .filter_level(log::LevelFilter::Debug)
         .filter_module("reqwest", log::LevelFilter::Info)
         .filter_module("hyper_util", log::LevelFilter::Info)
-        .filter_module("utile::resource", log::LevelFilter::Warn)
+        .filter_module("resource", log::LevelFilter::Warn)
         .init();
 
     // let _clear_cache =

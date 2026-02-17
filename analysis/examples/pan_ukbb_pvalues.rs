@@ -8,7 +8,7 @@ use genomes1000::{Genomes1000Fs, simplified::SimplifiedRecord};
 use hail::contig::{GRCh37Contig, GRCh38Contig};
 use ordered_float::NotNan;
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
-use utile::resource::{RawResource, RawResourceExt};
+use resource::{RawResource, RawResourceExt};
 
 use analysis::{
     pvalues::PhenotypeTopPValues,
@@ -30,7 +30,7 @@ async fn main() {
         .filter_level(log::LevelFilter::Debug)
         .filter_module("reqwest", log::LevelFilter::Info)
         .filter_module("hyper_util", log::LevelFilter::Info)
-        .filter_module("utile::resource", log::LevelFilter::Warn)
+        .filter_module("resource", log::LevelFilter::Warn)
         .init();
 
     // let _clear_cache =
@@ -271,20 +271,17 @@ async fn load_and_cache_top_pvalues(
         );
 
         path.write_file(
-            utile::resource::iter::IterToJsonLinesResource::new(
-                "_unused".to_owned(),
-                all_stats.iter(),
-            )
-            .compressed_with(utile::resource::Compression::Gzip)
-            .buffered()
-            .read()
-            .unwrap(),
+            resource::iter::IterToJsonLinesResource::new("_unused".to_owned(), all_stats.iter())
+                .compressed_with(resource::Compression::Gzip)
+                .buffered()
+                .read()
+                .unwrap(),
         )
         .unwrap();
     }
 
     let mut all: Vec<SummaryStats<GRCh38Contig>> = path
-        .decompressed_with(utile::resource::Compression::Gzip)
+        .decompressed_with(resource::Compression::Gzip)
         .read_json_lines()
         .unwrap()
         .map(|s| s.unwrap())

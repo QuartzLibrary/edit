@@ -2,7 +2,7 @@ use gloo_worker::HandlerId;
 use std::io;
 
 use pan_ukbb::PhenotypeManifestEntry;
-use utile::resource::UrlResource;
+use resource::UrlResource;
 
 use analysis::{pvalues::PhenotypeTopPValues, scores::Scores};
 

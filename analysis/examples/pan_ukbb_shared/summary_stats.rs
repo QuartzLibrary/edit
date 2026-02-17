@@ -1,15 +1,12 @@
 use std::cmp::Ordering;
 
 use analysis::util::InspectEvery;
-use biocore::location::orientation::{SequenceOrientation, WithOrientation};
+use biocore::location::orientation::{SequenceOrientation, Stranded};
 use futures::{StreamExt, stream};
 use hail::contig::{GRCh37Contig, GRCh38Contig};
 use pan_ukbb::{PhenotypeManifestEntry, SummaryStats};
+use resource::{RawResource, RawResourceExt, fs::FsCacheEntry};
 use tokio::task::spawn_blocking;
-use utile::{
-    cache::FsCacheEntry,
-    resource::{RawResource, RawResourceExt},
-};
 
 type FastaReader = biocore::fasta::IndexedFastaReader<std::io::BufReader<std::fs::File>>;
 
@@ -54,7 +51,7 @@ pub async fn summary_stats(
 
     summary_stats_entry
         .clone()
-        .decompressed_with(utile::resource::Compression::Gzip)
+        .decompressed_with(resource::Compression::Gzip)
         .read_json_lines()
         .unwrap()
         .map(|s| s.unwrap())
@@ -99,11 +96,11 @@ async fn load_and_cache_summary_stats(
 
                 entry
                     .write_file(
-                        utile::resource::iter::IterToJsonLinesResource::new(
+                        resource::iter::IterToJsonLinesResource::new(
                             "_unused".to_owned(),
                             summary_stats.iter(),
                         )
-                        .compressed_with(utile::resource::Compression::Gzip)
+                        .compressed_with(resource::Compression::Gzip)
                         .buffered()
                         .read()
                         .unwrap(),
@@ -158,7 +155,7 @@ fn load_summary_stats(
             }
 
             liftover
-                .map_range_raw(&WithOrientation::new_forward(at))
+                .map_range_raw(&Stranded::new_forward(at))
                 .filter_map(|mut mapped| {
                     let was_flipped = mapped.is_reverse();
                     mapped.set_orientation(SequenceOrientation::Forward);

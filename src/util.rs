@@ -24,10 +24,8 @@ use std::{
 use wasm_bindgen::{JsCast, prelude::Closure};
 use web_sys::{self, MediaQueryListEvent};
 
-use utile::{
-    drop::ExecuteOnDrop,
-    resource::{Compression, RawResource, RawResourceExt, UrlResource},
-};
+use resource::{Compression, RawResource, RawResourceExt, UrlResource};
+use utile::drop::ExecuteOnDrop;
 
 pub static DARK_MODE: LazyLock<ArcSignal<bool>> =
     LazyLock::new(|| media_query_signal("(prefers-color-scheme: dark)"));
