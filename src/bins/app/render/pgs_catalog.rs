@@ -897,6 +897,12 @@ fn edit_table_line(variant_info: &VariantInfo, loading: ArcSignal<bool>) -> impl
         "https://gnomad.broadinstitute.org/variant/{chr}-{pos}-{reference_allele}-{effect_allele}?dataset=gnomad_r4"
     );
 
+    let ref_effect_match = reference_allele.len() == effect_allele.len()
+        && reference_allele
+            .iter()
+            .zip(effect_allele.iter())
+            .all(|(a, b)| a == b);
+
     html::div()
         .class("card edit-item")
         .class(("loading", loading))
@@ -906,15 +912,25 @@ fn edit_table_line(variant_info: &VariantInfo, loading: ArcSignal<bool>) -> impl
                     html::span()
                         .class("edit-position")
                         .child(format!("{chr}:{pos}")),
-                    html::span()
-                        .class("edit-alleles")
-                        .child(format!("{reference_allele} → {effect_allele}")),
-                    html::a()
-                        .class("gnomad-link")
-                        .attr("href", gnomad_link)
-                        .attr("target", "_blank")
-                        .attr("rel", "noopener noreferrer")
-                        .child("gnomAD"),
+                    if ref_effect_match {
+                        html::span()
+                            .class("edit-alleles")
+                            .child(format!("{effect_allele}"))
+                            .into_any()
+                    } else {
+                        (
+                            html::span()
+                                .class("edit-alleles")
+                                .child(format!("{reference_allele} → {effect_allele}")),
+                            html::a()
+                                .class("gnomad-link")
+                                .attr("href", gnomad_link)
+                                .attr("target", "_blank")
+                                .attr("rel", "noopener noreferrer")
+                                .child("gnomAD"),
+                        )
+                            .into_any()
+                    },
                     rs_id.map(|rs_id| html::span().child(format!("rsID: {rs_id}"))),
                 )),
                 html::div().class("edit-dosage").child((
