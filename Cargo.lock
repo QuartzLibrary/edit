@@ -439,7 +439,7 @@ dependencies = [
 [[package]]
 name = "biocore"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "either",
  "log",
@@ -1249,7 +1249,7 @@ dependencies = [
 [[package]]
 name = "genomes1000"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "biocore",
  "csv",
@@ -1426,7 +1426,7 @@ dependencies = [
 [[package]]
 name = "hail"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "biocore",
  "either",
@@ -1832,7 +1832,7 @@ dependencies = [
 [[package]]
 name = "ids"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "serde",
  "thiserror 2.0.12",
@@ -2170,7 +2170,7 @@ dependencies = [
 [[package]]
 name = "liftover"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "anyhow",
  "biocore",
@@ -2695,7 +2695,7 @@ dependencies = [
 [[package]]
 name = "pan_ukbb"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "biocore",
  "csv",
@@ -2762,7 +2762,7 @@ checksum = "e3148f5046208a5d56bcfc03053e3ca6334e51da8dfb19b6cdc8b306fae3283e"
 [[package]]
 name = "pgs_catalog"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "biocore",
  "csv",
@@ -3402,7 +3402,7 @@ dependencies = [
 [[package]]
 name = "resource"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "ahash 0.8.12",
  "async-compression",
@@ -4586,7 +4586,7 @@ checksum = "06abde3611657adf66d383f00b093d7faecc7fa57071cce2578660c9f1010821"
 [[package]]
 name = "utile"
 version = "0.1.0"
-source = "git+https://github.com/QuartzLibrary/bio?rev=8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd#8a5c48d91e2079fc7dc8a3d656f8cf7cbf2901dd"
+source = "git+https://github.com/QuartzLibrary/bio?rev=2895f5feed801850d39bd2e429220ac1785c6c50#2895f5feed801850d39bd2e429220ac1785c6c50"
 dependencies = [
  "ahash 0.8.12",
  "bytes",
