@@ -4,6 +4,18 @@ cargo-features = ["profile-rustflags"]
 members = ["./.", "analysis"]
 resolver = "2"
 
+[workspace.dependencies]
+biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+genomes1000 = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+hail = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+ids = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+liftover = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+pgs_catalog = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+resource = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+utile = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+leptos_ext = { git = "https://github.com/QuartzLibrary/leptos_ext", rev = "84e0be960509f1ed08a049cf785972f85234f575" }
+
 [package]
 name = "edit"
 version = "0.1.0"
@@ -24,14 +36,14 @@ path = "src/bins/pgs_main.rs"
 [dependencies]
 analysis = { path = "analysis" }
 
-biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-hail = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-pgs_catalog = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-resource = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-utile = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+biocore.workspace = true
+hail.workspace = true
+pan_ukbb.workspace = true
+pgs_catalog.workspace = true
+resource.workspace = true
+utile.workspace = true
 
-leptos_ext = { git = "https://github.com/QuartzLibrary/leptos_ext", rev = "84e0be960509f1ed08a049cf785972f85234f575" }
+leptos_ext.workspace = true
 
 either = "1"
 flate2 = "1"

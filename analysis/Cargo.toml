@@ -4,15 +4,15 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-biocore = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-genomes1000 = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-hail = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-ids = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-liftover = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-pgs_catalog = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-resource = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-utile = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
+biocore.workspace = true
+genomes1000.workspace = true
+hail.workspace = true
+ids.workspace = true
+liftover.workspace = true
+pan_ukbb.workspace = true
+pgs_catalog.workspace = true
+resource.workspace = true
+utile.workspace = true
 
 bincode = { version = "2", features = ["serde"] }
 brotli = "8"
