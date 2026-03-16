@@ -1,14 +1,6 @@
 use gloo_worker::{Spawnable, WorkerBridge};
-use leptos::{
-    IntoView, ev,
-    html::{self},
-    prelude::*,
-    view,
-};
-use leptos_ext::{
-    signal::{Load, ReadSignalExt, WriteSignalExt},
-    util::Task,
-};
+use leptos::{IntoView, ev, html, prelude::*, view};
+use leptos_ext::signal::{Load, ReadSignalExt, WriteSignalExt};
 use ordered_float::NotNan;
 use pgs_catalog::{
     PgsId,
@@ -20,7 +12,7 @@ use std::{
     sync::{Arc, Mutex},
     time::Duration,
 };
-use thaw::*;
+use utile::task::Task;
 
 use analysis::{
     pgs_scores::{Association, parse_contig},
@@ -335,9 +327,7 @@ fn render_controls(state: &PageState) -> impl IntoView + use<> {
     html::div().class("card controls").child((
         slider_with_controls(
             "Edits: ",
-            edit_count
-                .double_bind(|i| *i as f64, move |edit| *edit as isize)
-                .into(),
+            edit_count.double_bind(|i| *i as f64, move |edit| *edit as isize),
             -(edit_limit as f64),
             edit_limit as f64,
             1.0,
@@ -359,7 +349,7 @@ fn slider_with_controls(
     zero: &'static str,
     tip: Option<&'static str>,
 ) -> impl IntoView {
-    let slider = view! { <Slider value={signal} min={min} max={max} step={step} show_stops=false style="width: 100%;" />};
+    let slider = view! { <thaw::Slider value={signal} min={min} max={max} step={step} show_stops=false style="width: 100%;" />};
     let plus = html::button()
         .class("btn")
         .attr("disabled", signal.map(move |v| v == &max))

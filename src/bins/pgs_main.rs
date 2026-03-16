@@ -1,5 +1,5 @@
 use gloo_worker::Registrable;
-use leptos::task::Executor;
+use any_spawner::Executor;
 
 use edit::pgs_worker::PgsWorkerStruct;
 

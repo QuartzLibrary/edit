@@ -1,22 +1,13 @@
 use gloo_worker::{Spawnable, WorkerBridge};
-use leptos::{
-    IntoView, ev,
-    html::{self},
-    prelude::*,
-    view,
-};
-use leptos_ext::{
-    signal::{Load, ReadSignalExt, WriteSignalExt},
-    util::Task,
-};
+use leptos::{IntoView, ev, html, prelude::*, view};
+use leptos_ext::signal::{Load, ReadSignalExt, WriteSignalExt};
 use ordered_float::NotNan;
 use plotly::layout::{Shape, ShapeLine};
 use std::{
     sync::{Arc, Mutex},
     time::Duration,
 };
-use thaw::*;
-use utile::any::AnyMap;
+use utile::{any::AnyMap, task::Task};
 
 use pan_ukbb::{PhenotypeManifestEntry, Population, SummaryStats};
 
@@ -344,22 +335,20 @@ fn render_controls(state: &PageState) -> impl IntoView + use<> {
     html::div().class("card controls").child((
         slider_with_controls(
             "Edits: ",
-            edit_count
-                .double_bind(
-                    |i| *i as f64,
-                    move |edit| {
-                        let edit = *edit as isize;
+            edit_count.double_bind(
+                |i| *i as f64,
+                move |edit| {
+                    let edit = *edit as isize;
 
-                        // To make a certain number of edits, we need to pick from at least that many p-values.
-                        let top = top_pvalues.get_untracked();
-                        if top != 0 && top < edit.unsigned_abs() {
-                            top_pvalues.set(edit.unsigned_abs());
-                        }
+                    // To make a certain number of edits, we need to pick from at least that many p-values.
+                    let top = top_pvalues.get_untracked();
+                    if top != 0 && top < edit.unsigned_abs() {
+                        top_pvalues.set(edit.unsigned_abs());
+                    }
 
-                        edit
-                    },
-                )
-                .into(),
+                    edit
+                },
+            ),
             -500.0,
             500.0,
             1.0,
@@ -368,21 +357,19 @@ fn render_controls(state: &PageState) -> impl IntoView + use<> {
         ),
         slider_with_controls(
             "Top p-values: ",
-            top_pvalues
-                .double_bind(
-                    |i| *i as f64,
-                    move |top| {
-                        let top = *top as usize;
+            top_pvalues.double_bind(
+                |i| *i as f64,
+                move |top| {
+                    let top = *top as usize;
 
-                        let edit = edit_count.get_untracked();
-                        if top != 0 && top < edit.unsigned_abs() {
-                            edit_count.set(top as isize);
-                        }
+                    let edit = edit_count.get_untracked();
+                    if top != 0 && top < edit.unsigned_abs() {
+                        edit_count.set(top as isize);
+                    }
 
-                        top
-                    },
-                )
-                .into(),
+                    top
+                },
+            ),
             0.0,
             3_000.0,
             1.0,
@@ -405,7 +392,7 @@ fn slider_with_controls(
     zero: &'static str,
     tip: Option<&'static str>,
 ) -> impl IntoView {
-    let slider = view! { <Slider value={signal} min={min} max={max} step={step} show_stops=false style="width: 100%;" />};
+    let slider = view! { <thaw::Slider value={signal} min={min} max={max} step={step} show_stops=false style="width: 100%;" />};
     let plus = html::button()
         .class("btn")
         .attr("disabled", signal.map(move |v| v == &max))
@@ -824,11 +811,8 @@ fn render_edit_analysis_panel(
             }),
         html::div().class("card sort-settings").child((
             "Sort by: ",
-            [
-                (sort_by_pvalue, "p-value"),
-                (sort_by_effect.into(), "effect"),
-            ]
-            .map(|(signal, label)| toggle_button(signal, label, None)),
+            [(sort_by_pvalue, "p-value"), (sort_by_effect, "effect")]
+                .map(|(signal, label)| toggle_button(signal, label, None)),
         )),
         move || {
             // Rendering long lists can be kind of slow, this is a horrible hack that just renders it in chunks,

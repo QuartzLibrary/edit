@@ -14,7 +14,7 @@ pan_ukbb = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed8018
 pgs_catalog = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
 resource = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
 utile = { git = "https://github.com/QuartzLibrary/bio", rev = "2895f5feed801850d39bd2e429220ac1785c6c50" }
-leptos_ext = { git = "https://github.com/QuartzLibrary/leptos_ext", rev = "84e0be960509f1ed08a049cf785972f85234f575" }
+leptos_ext = { git = "https://github.com/QuartzLibrary/leptos_ext", rev = "3f4145508710bbc51577a7a8a702104b277fcfa8" }
 
 [package]
 name = "edit"
@@ -58,8 +58,11 @@ web-time = "1"
 console_error_panic_hook = "0.1"
 console_log = "1"
 gloo-render = "0.2"
-leptos = { version = "0.7", features = ["csr", "rustls"] }
-thaw = { version = "0.4", features = ["csr"] }
+# Pinned because of conflicting reqwest versions.
+leptos = { version = "=0.8.15", features = ["csr", "rustls"] }
+server_fn = "=0.8.9"
+any_spawner = "0.3" # Leptos related
+thaw = { version = "0.5.0-beta", features = ["csr"] }
 web-sys = { version = "0.3", features = [
     "Element",
     "Document",

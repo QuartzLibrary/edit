@@ -201,7 +201,7 @@ pub async fn wait_for<T>(id: HandlerId, f: impl Fn() -> Option<T>) -> T {
         }
 
         log::info!("[Worker][{id:?}] Data not ready.");
-        leptos_ext::util::sleep(Duration::from_millis(200)).await;
+        utile::time::sleep(Duration::from_millis(200)).await;
     }
 }
 
