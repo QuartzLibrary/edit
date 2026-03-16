@@ -1,5 +1,3 @@
-#![feature(btree_set_entry)]
-
 pub mod pgs_worker;
 pub mod send_option;
 pub mod ukbb_worker;

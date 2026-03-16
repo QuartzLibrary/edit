@@ -1,5 +1,3 @@
-#![feature(if_let_guard)]
-
 mod render;
 
 use leptos::{IntoView, ev, html, prelude::*, *};
