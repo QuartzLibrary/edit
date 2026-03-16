@@ -60,7 +60,14 @@ console_log = "1"
 gloo-render = "0.2"
 leptos = { version = "0.7", features = ["csr", "rustls"] }
 thaw = { version = "0.4", features = ["csr"] }
-web-sys = { version = "0.3", features = ["Element", "Document", "DomRect", "MediaQueryList", "MediaQueryListEvent", "MediaQueryListEventInit"] }
+web-sys = { version = "0.3", features = [
+    "Element",
+    "Document",
+    "DomRect",
+    "MediaQueryList",
+    "MediaQueryListEvent",
+    "MediaQueryListEventInit",
+] }
 gloo-console = "0.3"
 gloo-worker = { version = "0.5", features = ["futures"] }
 

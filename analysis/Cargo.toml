@@ -22,7 +22,13 @@ flate2 = { version = "1", features = ["zlib-rs"], default-features = false }
 futures = "0.3"
 itertools = "0.14"
 log = "0.4"
-noodles = { version = "0.97", features = ["core", "fasta", "vcf", "tabix", "bgzf"] }
+noodles = { version = "0.97", features = [
+    "core",
+    "fasta",
+    "vcf",
+    "tabix",
+    "bgzf",
+] }
 ordered-float = { version = "5", features = ["serde"] }
 plotly = "0.12"
 serde = { version = "1", features = ["derive", "rc"] }

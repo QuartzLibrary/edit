@@ -1,5 +1,8 @@
 [target.wasm32-unknown-unknown]
-rustflags = ['--cfg', 'getrandom_backend="wasm_js"'] # '--cfg', 'leptos_debuginfo' (bug upstream)
+rustflags = [
+    '--cfg',
+    'getrandom_backend="wasm_js"',
+] # '--cfg', 'leptos_debuginfo' (bug upstream)
 
 # [patch.'https://github.com/QuartzLibrary/bio']
 # biocore = { path = "../bio/biocore" }
